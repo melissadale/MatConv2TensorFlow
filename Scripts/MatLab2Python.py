@@ -50,23 +50,24 @@ def model_creation(path_to_model):
     model = []
 
     for i in data['net']['layers']:
+        ## THIS IS WHERE YOU WILL NEED TO ADD ADDITIONAL INFO
+        ## SUCH AS ACTIVATIONS, in my example, I knew they were all
+        ## relu activations, and so I did not bother scraping them
+        
         if i.type == 'conv':
             model.append({'weights': i.weights[0], 'bias': i.weights[1], 'stride': i.stride, 'padding': i.pad, 'momentum': i.momentum,'lr': i.learningRate,'weight_decay': i.weightDecay})
 
-        # RELU
-        else:
-            if i.type == 'softmaxloss':
+        elif i.type == 'softmaxloss':
                 data = i.__dict__['class'] # matconv model helpfully names something a class, which causes errors in python
                 model.append(['softmax', data])
 
-            else:
-                model.append('relu')
+
 
     pickle.dump(model, open("model.p", "wb" ))
 
 
     print('Successfully scrapped data from MatConvNet Model')
-    print('Generating TensorFlow Model')
+    print('Next Up: Generate TensorFlow Model')
 
 
 model_creation('net.mat')
