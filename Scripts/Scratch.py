@@ -20,6 +20,8 @@ class cnn():
             'wc4': tf.Variable(self.model[5]['weights'])
         }
 
+
+
     # tf Graph input
     X = tf.placeholder(tf.float32, [None, input_size, input_size])
 
@@ -28,21 +30,30 @@ class cnn():
         x = tf.nn.conv2d(x, W, strides=[1, strides, strides, 1], padding='SAME')
         return tf.nn.relu(x)
 
+    def maxpool2d(x, k=2):
+        # MaxPool2D wrapper
+        return tf.nn.max_pool(x, ksize=[1, k, k, 1], strides=[1, k, k, 1],
+                              padding='SAME')
+
     # Create model
     def conv_net(self, x, weights):
         x = tf.reshape(x, shape=[-1, self.input_size, self.input_size, 1])
         conv1 = self.conv2d(x, tf.reshape(weights['wc1'], shape=[5,5,1,20]))
-        pool1 = tf.layers.max_pooling2d(inputs=conv1, pool_size=self.model[1]['pool'], strides=self.model[1]['stride'])
+        pool1 = self.maxpool2d(conv1)
         conv2 = self.conv2d(pool1, weights['wc2'])
-        pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=self.model[3]['pool'], strides=self.model[3]['stride'])
+        pool2 = self.maxpool2d(conv2)
 
-        # conv3 = self.conv2d(pool2, weights['wc3'])
-        dense = tf.layers.dense(pool2, weights['wc3'], activation=tf.nn.relu)
 
         # Fully connected layer
-        fc1 = tf.reshape(dense, [-1, weights['wc4'].get_shape().as_list()[0]])
-        fc1 = tf.add(tf.matmul(fc1, weights['wc4']))
-        out = tf.nn.relu(fc1)
+        # Reshape conv2 output to fit fully connected layer input
+        fc1 = tf.reshape(conv2, [-1, weights['wc3'].get_shape().as_list()[0]])
+        fc1 = tf.add(tf.matmul(fc1, weights['wc3']))
+        fc1 = tf.nn.relu(fc1)
+        # Apply Dropout
+        # fc1 = tf.nn.dropout(fc1, dropout)
+
+        # Output, class prediction
+        out = tf.add(tf.matmul(fc1, weights['wc4']))
         return out
 
     def run(self):

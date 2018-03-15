@@ -1,3 +1,4 @@
 .idea/
 Tests/MNIST-data/
 Tests/__init__.py
+Tests/
