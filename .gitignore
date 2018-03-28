@@ -2,3 +2,5 @@
 Tests/MNIST-data/
 Tests/__init__.py
 Tests/
+MNIST-data/
+Scripts/.mnist_convnet_model/
