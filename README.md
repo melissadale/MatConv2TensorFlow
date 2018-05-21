@@ -10,7 +10,8 @@ This is performed in 2 stages: scrape the matconvnet to make a
 
  * **MatLab2Python.py**: Run this first to make a model.p pickle file. You just need to make sure the "net.mat" string matches the name/path to your matconvnet mat file at the bottom of the file. This pulls a python dictionary from the matconvnet model, and then creates a human readable model representation - which is a list of dictionaries for the layers. 
  
- * **Conv2TF.py**: this is the specific Tensorflow Model. It REALLY should only be used for reference in creating your own models. It loads the pickle file generated in the previous file, and creates a basic tensorflow CNN model. To Use: you must update the input size at the top - and adjust the number of layers accordingly. 
+  * **Conv2TF-Slim.py**: this is the specific Tensorflow Model using TF-Slim. It REALLY should only be used for reference in creating your own models. It loads the pickle file generated in the previous file, and creates a basic tensorflow CNN model. To Use: you must update the input size at the top - and adjust the number of layers accordingly.
+ 
 
 
 ## DISCLAIMERS
